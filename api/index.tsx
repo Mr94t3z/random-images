@@ -7,6 +7,12 @@ import { randomInt } from 'crypto';
 // import { devtools } from 'frog/dev';
 // import { serveStatic } from 'frog/serve-static';
 
+const baseUrl = "https://warpcast.com/~/compose";
+const text = "Get your MASKS Message 🎭\nFrame by @gusik4ever";
+const embedUrl = "https://frame-by-wincy.vercel.app/api/frame";
+
+const BROWSER_LOCATION = `${baseUrl}?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(embedUrl)}`;
+
 export const app = new Frog({
   assetsPath: '/',
   basePath: '/api/frame',
@@ -16,6 +22,7 @@ export const app = new Frog({
     width: 1024,
   },
   ui: { vars },
+  browserLocation: BROWSER_LOCATION
 })
 
 // Array of image URLs with aspect ratio 1.22:1
@@ -34,31 +41,8 @@ const images = [
 
 app.frame('/', (c) => {
   return c.res({
-    image: (
-      <Box
-          grow
-          alignVertical="center"
-          backgroundColor="black"
-          height="100%"
-      >
-        <VStack gap="4">
-          <Box
-            grow
-            alignVertical="center"
-            backgroundColor="white"
-            padding="40"
-            height="100%"
-          >
-            <Image
-                height="100%"
-                width="100%"
-                objectFit="cover"
-                src="/Main.png"
-              />
-          </Box>
-        </VStack>
-      </Box>
-    ),
+    title: 'MASKS Message',
+    image: '/Main.png',
     intents: [
       <Button action="/button-pressed">Get MASKS Message</Button>,
     ],
