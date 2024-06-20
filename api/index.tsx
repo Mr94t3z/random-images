@@ -27,16 +27,16 @@ export const app = new Frog({
 
 // Array of image URLs with aspect ratio 1.22:1
 const images = [
-  '/images/img1.png',
-  '/images/img2.png',
-  '/images/img3.png',
-  '/images/img4.png',
-  '/images/img5.png',
-  '/images/img6.png',
-  '/images/img7.png',
-  '/images/img8.png',
-  '/images/img9.png',
-  '/images/img10.png',
+  { id: '1', url: '/images/img1.png' },
+  { id: '2', url: '/images/img2.png' },
+  { id: '3', url: '/images/img3.png' },
+  { id: '4', url: '/images/img4.png' },
+  { id: '5', url: '/images/img5.png' },
+  { id: '6', url: '/images/img6.png' },
+  { id: '7', url: '/images/img7.png' },
+  { id: '8', url: '/images/img8.png' },
+  { id: '9', url: '/images/img9.png' },
+  { id: '10', url: '/images/img10.png' },
 ];
 
 app.frame('/', (c) => {
@@ -47,59 +47,88 @@ app.frame('/', (c) => {
       <Button action="/button-pressed">Get MASKS Message</Button>,
     ],
   })
-})
+});
 
 app.frame('/button-pressed', (c) => {
-  try {
-    const randomIndex = randomInt(images.length);
-    const selectedImage = images[randomIndex];
+  const randomIndex = randomInt(images.length);
+  const selectedImage = images[randomIndex];
 
-    const baseUrl = "https://warpcast.com/~/compose";
-    const text = "I got this MASKS Message. Let's check yours 🎭\nFrame by @gusik4ever";
-    const embedUrlByUser = "https://frame-by-wincy.vercel.app/api/frame/button-pressed";
+  const baseUrl = "https://warpcast.com/~/compose";
+  const text = "I got this MASKS Message. Let's check yours 🎭\nFrame by @gusik4ever";
+  const embedUrlByUser = `https://frame-by-wincy.vercel.app/api/frame/shared/${selectedImage.id}`;
 
-    const SHARE_BY_USER = `${baseUrl}?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(embedUrlByUser)}`;
+  const SHARE_BY_USER = `${baseUrl}?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(embedUrlByUser)}`;
 
-    return c.res({
-      title: 'MASKS Message',
-      image: (
-        <Box
+  return c.res({
+    title: 'MASKS Message',
+    image: (
+      <Box
+        grow
+        alignVertical="center"
+        backgroundColor="black"
+        height="100%"
+      >
+        <VStack gap="4">
+          <Box
             grow
             alignVertical="center"
-            backgroundColor="black"
+            backgroundColor="white"
+            padding="40"
             height="100%"
-        >
-          <VStack gap="4">
-            <Box
-              grow
-              alignVertical="center"
-              backgroundColor="white"
-              padding="40"
+          >
+            <Image
               height="100%"
-            >
-              <Image
-                  height="100%"
-                  width="100%"
-                  objectFit="contain"
-                  src={selectedImage}
-                />
-            </Box>
-          </VStack>
-        </Box>
-      ),
-      intents: [
-        <Button action="/">Check yours</Button>,
-        <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
-      ],
-    });
-  } catch (error) {
-    return c.res({
-      image: '/Main.png',
-      intents: [
-        <Button action="/">Try again</Button>,
-      ],
-    });
-  }
+              width="100%"
+              objectFit="contain"
+              src={selectedImage.url}
+            />
+          </Box>
+        </VStack>
+      </Box>
+    ),
+    intents: [
+      <Button action="/">Check yours</Button>,
+      <Button.Link href={SHARE_BY_USER}>Share</Button.Link>,
+    ],
+  });
+});
+
+app.frame('/shared/:imageId', (c) => {
+  const imageId = c.req.param('imageId');
+  const selectedImage = images.find(img => img.id === imageId)?.url || '/Main.png';
+
+  return c.res({
+    title: 'MASKS Message',
+    image: (
+      <Box
+        grow
+        alignVertical="center"
+        backgroundColor="black"
+        height="100%"
+      >
+        <VStack gap="4">
+          <Box
+            grow
+            alignVertical="center"
+            backgroundColor="white"
+            padding="40"
+            height="100%"
+          >
+            <Image
+              height="100%"
+              width="100%"
+              objectFit="contain"
+              src={selectedImage}
+            />
+          </Box>
+        </VStack>
+      </Box>
+    ),
+    intents: [
+      <Button action="/">Check yours</Button>,
+      <Button.Link href={BROWSER_LOCATION}>Share</Button.Link>,
+    ],
+  });
 });
 
 
