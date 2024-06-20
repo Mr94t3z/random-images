@@ -34,7 +34,31 @@ const images = [
 
 app.frame('/', (c) => {
   return c.res({
-    image: '/Main.png',
+    image: (
+      <Box
+          grow
+          alignVertical="center"
+          backgroundColor="black"
+          height="100%"
+      >
+        <VStack gap="4">
+          <Box
+            grow
+            alignVertical="center"
+            backgroundColor="white"
+            padding="40"
+            height="100%"
+          >
+            <Image
+                height="100%"
+                width="100%"
+                objectFit="cover"
+                src="/Main.png"
+              />
+          </Box>
+        </VStack>
+      </Box>
+    ),
     intents: [
       <Button action="/button-pressed">Get MASKS Message</Button>,
     ],
@@ -72,7 +96,6 @@ app.frame('/button-pressed', (c) => {
               <Image
                   height="100%"
                   width="100%"
-                  borderRadius="42"
                   objectFit="contain"
                   src={selectedImage}
                 />
