@@ -60,21 +60,20 @@ app.frame('/button-pressed', (c) => {
             grow
             alignVertical="center"
             backgroundColor="black"
-            padding="10"
             height="100%"
         >
           <VStack gap="4">
             <Box
               grow
               alignVertical="center"
-              backgroundColor="black"
-              padding="0"
+              backgroundColor="white"
+              padding="40"
               height="100%"
             >
               <Image
                   height="100%"
                   width="100%"
-                  borderRadius="56"
+                  borderRadius="42"
                   objectFit="contain"
                   src={selectedImage}
                 />
