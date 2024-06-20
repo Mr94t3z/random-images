@@ -53,7 +53,6 @@ app.frame('/button-pressed', (c) => {
     const SHARE_BY_USER = `${baseUrl}?text=${encodeURIComponent(text)}&embeds[]=${encodeURIComponent(embedUrlByUser)}`;
 
     return c.res({
-      imageAspectRatio: '1:1',
       title: 'MASKS Message',
       image: (
         <Box
